@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  
+# elias4044.com
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-12.4.0-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-First, run the development server:
+*The central hub for all of Elias4044's projects and services*
 
+[Live Site](https://elias4044.com) • [Documentation](https://elias4044.com/docs) • [Status](https://elias4044.com/status)
+
+</div>
+
+## 🚀 Features
+
+- 🎨 Stunning visual effects with Light Rays and Particles
+- 🌓 Dark/Light theme support
+- 📊 Real-time status monitoring
+- 📚 Interactive API documentation
+- 🎯 Project showcase
+- 🔧 Admin dashboard
+- 🎨 Color tools API
+- ⛅ Weather API integration
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 16
+- **Styling:** Tailwind CSS
+- **Animation:** Framer Motion
+- **Database:** Firebase
+- **UI Components:** Radix UI
+- **Graphics:** OGL
+- **Icons:** Lucide
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/elias4044/home.git
+cd home
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up environment variables**
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Run development server**
+```bash
+npm run dev
+```
 
-## Learn More
+Visit [http://localhost:3000](http://localhost:3000) to view the site.
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+├── app/               # Next.js app directory
+│   ├── api/          # API routes
+│   ├── docs/         # Documentation pages
+│   └── status/       # Status dashboard
+├── components/       # React components
+├── lib/             # Utility functions
+└── public/          # Static assets
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔧 API Reference
 
-## Deploy on Vercel
+The API includes various endpoints:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 🎨 Color Tools API
+  - `/api/v1/tools/color/info`
+  - `/api/v1/tools/color/palette`
+  - `/api/v1/tools/color/contrast`
+  
+- ⛅ Weather API
+  - `/api/v1/tools/weather/current`
+  - `/api/v1/tools/weather/forecast`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [API Documentation](https://elias4044.com/docs) for more details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<div align="center">
+
+---
+
+Made with ❤️ by [Elias Gulam](https://github.com/elias4044)
+
+[![GitHub](https://img.shields.io/badge/Follow-elias4044-black?style=social&logo=github)](https://github.com/elias4044)
+
+</div>

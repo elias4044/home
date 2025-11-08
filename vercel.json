@@ -1,0 +1,8 @@
+{
+  "kvNamespaces": [
+    {
+      "binding": "STATUS_KV",
+      "id": "status"
+    }
+  ]
+}

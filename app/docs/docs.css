@@ -1,0 +1,21 @@
+/* Docs color palette */
+:root {
+  --doc-bg: #1f1f1f;
+  --doc-fg: #e0e0e0;
+  --doc-muted: #a0a0a0;
+  --doc-accent: #4f8ef7;
+  --doc-card: #2a2a2a;
+  --doc-border: #3a3a3a;
+  --doc-code-bg: #2d2d2d;
+  --doc-link-hover: #6aa0ff;
+}
+
+/* Layout */
+html, body {
+  background-color: var(--doc-bg);
+  color: var(--doc-fg);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
