@@ -7,7 +7,12 @@
     "url": "https://elias4044.com"
   },
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "homepage": "https://elias4044.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elias4044/home.git"
+  },
   "private": false,
   "scripts": {
     "dev": "next dev",
@@ -30,6 +35,7 @@
     "firebase": "^12.4.0",
     "firebase-admin": "^13.5.0",
     "framer-motion": "^12.23.24",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.548.0",
     "motion": "^12.23.24",
     "next": "16.0.0",
