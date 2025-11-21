@@ -168,8 +168,9 @@ export default function Hub() {
     ? projects
     : projects.filter(p => p.category === selectedCategory);
 
-  const parallaxX = (mousePos.x / window.innerWidth - 0.5) * 20;
-  const parallaxY = (mousePos.y / window.innerHeight - 0.5) * 20;
+  const parallaxX = typeof window !== "undefined" ? (mousePos.x / window.innerWidth - 0.5) * 20 : 0;
+  const parallaxY = typeof window !== "undefined" ? (mousePos.y / window.innerHeight - 0.5) * 20 : 0;
+
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-blue-950 text-neutral-900 dark:text-neutral-100 overflow-hidden">
