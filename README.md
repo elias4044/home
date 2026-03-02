@@ -1,111 +1,240 @@
-<div align="center">
-  
-# elias4044.com
+# Elias4044.com
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-12.4.0-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38b2ac?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Deployed](https://img.shields.io/badge/Deployed-Vercel-000000?style=flat-square&logo=vercel)](https://vercel.com/)
 
-*The central hub for all of Elias4044's projects and services*
+A modern, interactive personal portfolio and home center built with cutting-edge web technologies. Features smooth animations, a custom canvas-based node visualization, and a fully responsive design.
 
-[Live Site](https://elias4044.com) • [Documentation](https://elias4044.com/docs) • [Status](https://elias4044.com/status)
+---
 
-</div>
+## About
 
-## 🚀 Features
+This is the source code for **elias4044.com** — a portfolio that showcases my work in full-stack development, creative coding, and modern web design. The site combines thoughtful UX, clean architecture, and interactive visual elements to create an engaging experience.
 
-- 🎨 Stunning visual effects with Light Rays and Particles
-- 🌓 Dark/Light theme support
-- 📊 Real-time status monitoring
-- 📚 Interactive API documentation
-- 🎯 Project showcase
-- 🔧 Admin dashboard
-- 🎨 Color tools API
-- ⛅ Weather API integration
+### What Makes It Special
 
-## 🛠️ Tech Stack
+- **Interactive Canvas Visualization** — Custom WebGL/Canvas-based node system
+- **Smooth Animations** — Polished transitions powered by Framer Motion and GSAP
+- **Responsive Design** — Optimized for all screen sizes
+- **Magnetic Cursor** — Custom interactive cursor effects
+- **Modern Stack** — Next.js 16, React 19, Tailwind CSS, and TypeScript
 
-- **Framework:** Next.js 16
-- **Styling:** Tailwind CSS
-- **Animation:** Framer Motion
-- **Database:** Firebase
-- **UI Components:** Radix UI
-- **Graphics:** OGL
-- **Icons:** Lucide
+---
 
-## 🚀 Getting Started
+## Tech Stack
 
-1. **Clone the repository**
+### Frontend
+- **Framework** — [Next.js](https://nextjs.org/) 16
+- **Runtime** — React 19 with React Server Components
+- **Styling** — [Tailwind CSS](https://tailwindcss.com/) with custom utilities
+- **Animations** — [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/)
+- **UI Components** — Radix UI (Accordion, Dialog, Tabs, Toast, Tooltip, etc.)
+- **Icons** — [Lucide React](https://lucide.dev/)
+
+### Graphics & Interaction
+- **Canvas Rendering** — [OGL](https://github.com/oframe/ogl) (Minimal WebGL library)
+- **Name Color Generation** — [NTC.js](https://chir.ag/projects/ntcjs/)
+
+### Backend & Services
+- **Database & Auth** — Firebase & Firebase Admin SDK
+- **Hosting** — Vercel (with Edge Functions support)
+
+### Tools & Quality
+- **Package Manager** — Node.js
+- **Code Quality** — [Biomejs](https://biomejs.dev/)
+- **TypeScript** — Strict mode for type safety
+- **Compiler** — Next.js React Compiler enabled for optimal performance
+
+---
+Optionally for local usage/development
+## Getting Started
+
+### Prerequisites
+
+Ensure you have Node.js installed (version 18 or higher recommended).
+
+### Installation
+
 ```bash
+# Clone the repository
 git clone https://github.com/elias4044/home.git
 cd home
-```
 
-2. **Install dependencies**
-```bash
+# Install dependencies
 npm install
 ```
 
-3. **Set up environment variables**
-```bash
-cp .env.example .env
-```
+### Development
 
-4. **Run development server**
+Start the development server:
+
 ```bash
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to view the site.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the site.
 
-## 📦 Project Structure
+### Building
 
-```
-├── app/               # Next.js app directory
-│   ├── api/          # API routes
-│   ├── docs/         # Documentation pages
-│   └── status/       # Status dashboard
-├── components/       # React components
-├── lib/             # Utility functions
-└── public/          # Static assets
+Build for production:
+
+```bash
+npm run build
+npm start
 ```
 
-## 🔧 API Reference
+### Code Quality
 
-The API includes various endpoints:
+Format and check code:
 
-- 🎨 Color Tools API
-  - `/api/v1/tools/color/info`
-  - `/api/v1/tools/color/palette`
-  - `/api/v1/tools/color/contrast`
-  
-- ⛅ Weather API
-  - `/api/v1/tools/weather/current`
-  - `/api/v1/tools/weather/forecast`
-
-Check out the [API Documentation](https://elias4044.com/docs) for more details.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-<div align="center">
+```bash
+npm run lint      # Check code with Biomejs
+npm run format    # Format code with Biomejs
+```
 
 ---
 
-Made with ❤️ by [Elias Gulam](https://github.com/elias4044)
+## Project Structure
 
-[![GitHub](https://img.shields.io/badge/Follow-elias4044-black?style=social&logo=github)](https://github.com/elias4044)
+```
+├── app/                    # Next.js app directory
+│   ├── page.tsx           # Main homepage
+│   ├── layout.tsx         # Root layout
+│   ├── globals.css        # Global styles
+│   └── api/               # API routes
+│
+├── components/            # React components
+│   ├── hero-section.tsx       # Landing section
+│   ├── about-section.tsx      # About me section
+│   ├── projects-section.tsx   # Work showcase
+│   ├── connect-section.tsx    # Contact/CTA section
+│   ├── navigation.tsx         # Main navigation
+│   ├── node-canvas.tsx        # Interactive canvas
+│   ├── magnetic-cursor.tsx    # Custom cursor effect
+│   ├── theme-provider.tsx     # Dark/light theme
+│   ├── footer.tsx            # Footer
+│   │
+│   │
+│   └── ui/                # Shadcn-style UI primitives
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── tabs.tsx
+│       └── ...
+│
+├── hooks/                 # Custom React hooks
+│   ├── use-in-view.ts    # Intersection observer hook
+│   ├── use-mobile.ts     # Mobile detection hook
+│   └── use-toast.ts      # Toast notifications hook
+│
+├── lib/                   # Utilities & helpers
+│   └── utils.ts          # Shared utility functions
+│
+├── public/               # Static assets
+│
+└── package.json          # Project metadata & dependencies
+```
 
-</div>
+---
+
+## Key Components
+
+### Hero Section
+The landing section with animated introduction, status indicator, and call-to-action. Features mount animations and smooth transitions.
+
+### About Section
+Detailed background with:
+- Multi-paragraph narrative about background and philosophy
+- Technology skills with hover effects
+- Interests and focus areas
+- Intersection observer-based animations
+
+### Projects Section
+Showcase of work with:
+- Project cards with descriptions and tech tags
+- Live links and status indicators (live, in-progress, archived)
+- Responsive grid layout
+
+### Interactive Elements
+- **Node Canvas** — Custom WebGL visualization of interconnected nodes
+- **Magnetic Cursor** — Custom cursor that follows and interacts with elements
+- **Smooth Scrolling** — Active section navigation based on scroll position
+
+---
+
+## Deployment
+
+The site is deployed on **Vercel** and automatically deploys when changes are pushed to the `master` branch.
+
+### Vercel Configuration
+
+See `vercel.json` for deployment settings.
+
+---
+
+## Customization
+
+### Theme & Colors
+The site uses Tailwind CSS with custom theme configuration in `tailwind.config.js`. Modify color variables to customize the appearance.
+
+### Content Updates
+- Update hero section text in `components/hero-section.tsx`
+- Modify projects array in `components/projects-section.tsx`
+- Edit about content in `components/about-section.tsx`
+- Change navigation items in `components/navigation.tsx`
+
+### Typography & Spacing
+All sizing and spacing uses Tailwind's utility classes. Adjust in component files or update the base Tailwind configuration.
+
+---
+
+## Browser Support
+
+The site is optimized for all modern browsers:
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+
+---
+
+## Performance
+
+- **React Compiler** — Enabled for automatic optimization
+- **Image Optimization** — Next.js built-in image optimization
+- **Code Splitting** — Automatic with Next.js App Router
+- **CSS Efficiency** — Tailwind CSS with PurgeCSS
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Author
+
+**Elias Gulam**
+
+- Website: [elias4044.com](https://elias4044.com)
+- Email: [elias4044@proton.me](mailto:elias4044@proton.me)
+- GitHub: [@elias4044](https://github.com/elias4044)
+
+---
+
+## Contributing
+
+While this is a personal project, feedback and suggestions are always welcome. Feel free to open an issue or reach out with ideas.
+
+---
+
+## Acknowledgments
+
+- [Radix UI](https://www.radix-ui.com/) for accessible component primitives
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
+- [Framer Motion](https://www.framer.com/motion/) for smooth animations
+- [GSAP](https://gsap.com/) for advanced animation capabilities
+- [Next.js](https://nextjs.org/) for the modern React framework
