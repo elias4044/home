@@ -22,14 +22,6 @@ const projects: Project[] = [
     status: "live",
   },
   {
-    title: "Portfolio",
-    description:
-      "My personal portfolio for people to learn more about me and my work. Built with Next.js & Tailwind CSS.",
-    tags: ["React", "Node.js", "Tailwind CSS"],
-    link: "https://portfolio.elias4044.com",
-    status: "live",
-  },
-  {
     title: "Schoolsoft+",
     description:
       "A complete makeover of the digital school platform Schoolsoft+ for students, while completly integrating with the official Schoolsoft.",
