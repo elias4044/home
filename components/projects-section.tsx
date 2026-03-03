@@ -30,6 +30,13 @@ const projects: Project[] = [
     status: "archived",
   },
   {
+    title: "Subway® Varberg",
+    description: "The website for Subway® Varberg, built with Next.js and Tailwind CSS.",
+    tags: ["Next.js", "Tailwind CSS"],
+    link: "https://subway-varberg.elias4044.com/",
+    status: "live",
+  },
+  {
     title: "Launch Menu",
     description:
       "A simple and easy-to-use launch menu for Windows. Built with Electron, Node.js, and React.",
