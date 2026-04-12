@@ -37,12 +37,12 @@ const projects: Project[] = [
     status: "live",
   },
   {
-    title: "Launch Menu",
+    title: "SlateUI",
     description:
-      "A simple and easy-to-use launch menu for Windows. Built with Electron, Node.js, and React.",
-    tags: ["Node.js", "Electron", "React"],
-    link: "https://github.com/elias4044/launch-menu",
-    status: "archived",
+      "A  modular, event-driven roblox framework built for developers who care about code quality.",
+    tags: ["Roblox", "Next.js", "UI"],
+    link: "https://slateui.elias4044.com",
+    status: "live",
   },
   {
     title: "EOAIZ",
