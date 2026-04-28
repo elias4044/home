@@ -24,10 +24,10 @@ const projects: Project[] = [
   {
     title: "Schoolsoft+",
     description:
-      "A complete makeover of the digital school platform Schoolsoft+ for students, while completly integrating with the official Schoolsoft.",
+      "Recently fully rebuilt, a complete makeover of the digital school platform Schoolsoft+ for students, while completly integrating with the official Schoolsoft.",
     tags: ["HTML/CSS/JS", "Firebase", "Vercel Edge Functions"],
     link: "https://ssp.elias4044.com",
-    status: "archived",
+    status: "live",
   },
   {
     title: "Subway® Varberg",
