@@ -168,7 +168,7 @@ const projects: Project[] = [
     description:
       "A roblox anti-cheat system built to scale. Provides cheat detection and prevention for all types of games, with a simple integration process and live monitoring dashboard.",
     tags: ["Node.js", "Discord.js", "Firebase"],
-    link: "https://github.com/elias4044/eoaiz",
+    link: "https://bloxsentinel.elias4044.com",
     status: "in-progress",
     year: "2026",
   },
