@@ -159,7 +159,7 @@ const projects: Project[] = [
     description:
       "An automated workflow extension for the Magma Matteappen application, built by reverse-engineering Magma's API. Adds smart features not available natively.",
     tags: ["Firebase", "Next.js", "Tailwind CSS", "Reverse Engineering"],
-    link: "https://magma.elias4044.com",
+    link: "https://studentsmatteappen.vercel.app",
     status: "live",
     year: "2026",
   },
