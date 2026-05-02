@@ -1,107 +1,148 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useRef } from "react"
+import { gsap } from "gsap"
+import { useGSAP } from "@gsap/react"
+import { LiveVisitorCount } from "@/components/live-visitor-count"
+import { SwedenClock } from "@/components/sweden-clock"
+
+gsap.registerPlugin(useGSAP)
+
+const NAME = "ELIAS"
 
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useGSAP(
+    () => {
+      // Pre-hide everything before first paint
+      gsap.set(".hero-char", { yPercent: 115 })
+      gsap.set(".hero-tag", { opacity: 0, y: 16 })
+      gsap.set(".hero-desc", { opacity: 0, y: 20 })
+      gsap.set(".hero-stat", { opacity: 0, y: 14 })
+      gsap.set(".hero-footer", { opacity: 0 })
+
+      // Animate TO final state
+      gsap
+        .timeline({ defaults: { ease: "power4.out" } })
+        .to(".hero-char", {
+          yPercent: 0,
+          duration: 1.15,
+          stagger: 0.045,
+          delay: 0.8, // wait for curtain to lift
+        })
+        .to(
+          ".hero-tag",
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
+          "-=0.5"
+        )
+        .to(
+          ".hero-desc",
+          { opacity: 1, y: 0, duration: 0.8 },
+          "-=0.45"
+        )
+        .to(
+          ".hero-stat",
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
+          "-=0.5"
+        )
+        .to(
+          ".hero-footer",
+          { opacity: 1, duration: 0.5 },
+          "-=0.3"
+        )
+    },
+    { scope: sectionRef }
+  )
 
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-6"
+      ref={sectionRef}
+      className="relative flex min-h-screen flex-col justify-between px-6 lg:px-16 pt-28 pb-12 overflow-hidden"
     >
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
-        <div
-          className={`transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-        >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-2 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-            </span>
-            <span className="font-mono text-xs text-muted-foreground">
-              Available for projects
-            </span>
-          </div>
-        </div>
-
-        <h1
-          className={`mb-6 text-5xl font-bold leading-tight tracking-tight text-foreground transition-all duration-1000 delay-200 md:text-7xl lg:text-8xl ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-        >
-          <span className="text-balance">
-            {"Hi, I'm "}
-            <span className="glow-text text-primary">Elias</span>
-          </span>
-        </h1>
-
-        <p
-          className={`mx-auto mb-8 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground transition-all duration-1000 delay-400 md:text-xl ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-        >
-          Full-stack developer with a growing focus on cybersecurity. 
-          I build secure, scalable systems and thoughtful interfaces — designed to work beautifully and hold up under pressure.
-        </p>
-
-        <div
-          className={`flex flex-wrap items-center justify-center gap-4 transition-all duration-1000 delay-600 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-        >
-          <a
-            href="#projects"
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:shadow-[0_0_30px_rgba(100,210,220,0.3)]"
-          >
-            <span className="relative z-10">View Projects</span>
-            <svg
-              className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-            <div className="absolute inset-0 bg-foreground/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          </a>
-          <a
-            href="#about"
-            className="inline-flex items-center gap-2 rounded-xl border border-border/50 bg-secondary/30 px-6 py-3 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-secondary/50"
-          >
-            About Me
-          </a>
-        </div>
-
-        <div
-          className={`mt-16 flex items-center justify-center gap-8 transition-all duration-1000 delay-800 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-        >
-          {[
-            { label: "Projects", value: "10+" },
-            { label: "Technologies", value: "15+" },
-            { label: "Years Building", value: "3+" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-2xl font-bold text-primary">{stat.value}</div>
-              <div className="text-xs text-muted-foreground">{stat.label}</div>
+      {/* Giant name */}
+      <div className="flex-1 flex flex-col justify-end pb-10">
+        <div className="flex leading-none select-none -ml-1 lg:-ml-2">
+          {NAME.split("").map((char, i) => (
+            <div key={i} className="overflow-hidden">
+              <span
+                className="hero-char inline-block font-black tracking-tighter text-foreground"
+                style={{ fontSize: "clamp(80px, 21vw, 300px)", lineHeight: 0.88, letterSpacing: "-0.04em" }}
+              >
+                {char}
+              </span>
             </div>
           ))}
         </div>
+
+        {/* Divider */}
+        <div className="mt-8 h-px w-full bg-border/20" />
+
+        {/* Subtitle row */}
+        <div className="mt-8 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="max-w-xl">
+            <div className="flex flex-wrap gap-2 mb-5">
+              <span className="hero-tag inline-flex items-center gap-1.5 rounded-full border border-border/30 bg-secondary/40 px-3 py-1 font-mono text-xs text-muted-foreground">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                Available for projects
+              </span>
+              <span className="hero-tag inline-flex items-center gap-1.5 rounded-full border border-border/30 bg-secondary/40 px-3 py-1 font-mono text-xs text-muted-foreground">
+                Based in Sweden
+              </span>
+            </div>
+            <p className="hero-desc text-xl md:text-2xl text-muted-foreground leading-relaxed">
+              Full-stack developer & cybersecurity enthusiast.
+              <br />
+              Building secure systems and thoughtful interfaces.
+            </p>
+          </div>
+
+          <div className="flex gap-10 md:gap-12">
+            {[
+              { value: "10+", label: "Projects Shipped" },
+              { value: "15+", label: "Technologies" },
+              { value: "3+", label: "Years Building" },
+            ].map((stat) => (
+              <div key={stat.label} className="hero-stat text-right">
+                <div className="text-3xl md:text-4xl font-black text-foreground tabular-nums">
+                  {stat.value}
+                </div>
+                <div className="mt-1 font-mono text-xs text-muted-foreground">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div
-          className={`flex flex-col items-center gap-2 transition-all duration-1000 delay-1000 ${mounted ? "opacity-100" : "opacity-0"
-            }`}
-        >
-          <span className="text-xs text-muted-foreground">Scroll to explore</span>
-          <div className="h-8 w-5 rounded-full border-2 border-muted-foreground/30 p-1">
-            <div className="h-2 w-1.5 animate-bounce rounded-full bg-primary/60 mx-auto" />
-          </div>
+      {/* Bottom bar */}
+      <div className="hero-footer flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-border/20 pt-6">
+        <div className="flex items-center gap-6">
+          <a
+            href="#projects"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:gap-3 transition-all duration-300"
+          >
+            <span>View Projects</span>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a
+            href="#about"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+          >
+            About me
+          </a>
+        </div>
+        <div className="flex items-center gap-6">
+          <LiveVisitorCount />
+          <div className="hidden sm:block w-px h-6 bg-border/20" />
+          <SwedenClock />
         </div>
       </div>
     </section>

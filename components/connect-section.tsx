@@ -1,87 +1,122 @@
 "use client"
 
-import { useInView } from "@/hooks/use-in-view"
-import { Github, Twitter, Mail, Linkedin, Globe } from "lucide-react"
+import { useRef } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
+import { motion } from "framer-motion"
+import { Github, Twitter, Mail, Globe, ArrowUpRight } from "lucide-react"
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const socials = [
   {
     name: "GitHub",
     icon: Github,
     href: "https://github.com/elias4044",
-    description: "Check out my code",
     handle: "@elias4044",
+    description: "Source code & open source",
   },
   {
     name: "X / Twitter",
     icon: Twitter,
     href: "https://x.com/elias4044_",
-    description: "Follow my thoughts",
-    handle: "@elias4044",
+    handle: "@elias4044_",
+    description: "Thoughts & updates",
   },
   {
     name: "Email",
     icon: Mail,
     href: "mailto:hello@elias4044.com",
-    description: "Drop me a line",
     handle: "hello@elias4044.com",
+    description: "Drop me a line",
   },
   {
     name: "Website",
     icon: Globe,
     href: "https://elias4044.com",
-    description: "You are here",
     handle: "elias4044.com",
+    description: "You are here",
   },
 ]
 
 export function ConnectSection() {
-  const { ref, isInView } = useInView({ threshold: 0.2 })
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      gsap.from(".connect-label", {
+        scrollTrigger: { trigger: ".connect-label", start: "top 88%" },
+        opacity: 0,
+        y: 16,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+
+      gsap.from(".connect-line", {
+        scrollTrigger: { trigger: ".connect-heading", start: "top 85%" },
+        opacity: 0,
+        y: 70,
+        duration: 1,
+        stagger: 0.12,
+        ease: "power3.out",
+      })
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <section id="connect" className="relative px-6 py-32" ref={ref}>
-      <div className="relative z-10 mx-auto max-w-4xl">
-        <div className="mb-16 text-center">
-          <div
-            className={`transition-all duration-700 ${
-              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            <span className="font-mono text-sm text-primary">{"// 03"}</span>
-            <h2 className="mt-2 text-4xl font-bold text-foreground md:text-5xl">
-              {"Let's Connect"}
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              {"If you'd like to discuss a project or just say hi, I'm always down to chat."}
-            </p>
-          </div>
+    <section id="connect" ref={sectionRef} className="px-6 lg:px-16 py-32 lg:py-48">
+      <div className="mx-auto max-w-7xl">
+        {/* Label */}
+        <span className="connect-label block font-mono text-xs text-muted-foreground tracking-widest uppercase mb-12">
+          03 — Connect
+        </span>
+
+        {/* Giant CTA */}
+        <div className="connect-heading mb-24 lg:mb-32">
+          {["Let's build", "something", "together."].map((line, i) => (
+            <div key={i} className="overflow-hidden">
+              <span
+                className="connect-line block font-black tracking-tighter text-foreground"
+                style={{
+                  fontSize: "clamp(52px, 11vw, 160px)",
+                  lineHeight: 0.92,
+                  letterSpacing: "-0.04em",
+                  color: i === 1 ? "oklch(0.50 0.005 270)" : undefined,
+                }}
+              >
+                {line}
+              </span>
+            </div>
+          ))}
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Social cards */}
+        <div className="connect-cards grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {socials.map((social, i) => {
             const Icon = social.icon
             return (
-              <a
+              <motion.a
                 key={social.name}
                 href={social.href}
                 target={social.href.startsWith("http") ? "_blank" : undefined}
                 rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className={`group relative flex items-center gap-4 rounded-2xl border border-border/30 bg-card/40 p-5 backdrop-blur-sm transition-all duration-500 hover:border-primary/40 hover:bg-card/60 hover:shadow-[0_0_30px_rgba(100,210,220,0.08)] ${
-                  isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: isInView ? `${200 + i * 100}ms` : "0ms" }}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="group flex flex-col justify-between p-6 border border-border/20 rounded-2xl hover:border-border/50 hover:bg-secondary/10 transition-colors duration-300 min-h-40"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-secondary/50 transition-all duration-300 group-hover:bg-primary/20 group-hover:shadow-[0_0_15px_rgba(100,210,220,0.2)]">
-                  <Icon className="h-5 w-5 text-muted-foreground transition-colors duration-300 group-hover:text-primary" />
+                <div className="flex items-start justify-between">
+                  <Icon className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors duration-300" />
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
                 </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">
-                    {social.name}
-                  </div>
-                  <div className="truncate font-mono text-xs text-muted-foreground">
-                    {social.handle}
-                  </div>
+                <div>
+                  <div className="text-sm font-semibold text-foreground mb-1">{social.name}</div>
+                  <div className="font-mono text-xs text-muted-foreground/60">{social.handle}</div>
                 </div>
-              </a>
+              </motion.a>
             )
           })}
         </div>

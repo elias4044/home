@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "visitors": {
+      "$sessionId": {
+        ".read": false,
+        ".write": "auth == null",
+        ".validate": "newData.hasChildren(['online', 'ts']) && newData.child('online').isBoolean() && newData.child('ts').isNumber()"
+      },
+      ".read": true
+    },
+    "project_views": {
+      "$projectSlug": {
+        ".read": true,
+        ".write": "auth == null && (!data.exists() || newData.val() === data.val() + 1)",
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      }
+    },
+    "page_views": {
+      ".read": true,
+      ".write": "auth == null",
+      ".validate": "newData.isNumber() && newData.val() >= 0"
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
+

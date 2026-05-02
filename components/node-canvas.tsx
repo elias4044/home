@@ -3,8 +3,6 @@
 // A very nice particle background effect using canvas and a bunch of math. 
 // Feel free to use this in your own projects but please consider giving credit to me.
 
-// I tried my best to make the code as clean and readable as possible in case you wanna read it.
-
 import { useEffect, useRef, useCallback } from "react"
 
 interface Particle {
@@ -15,6 +13,9 @@ interface Particle {
   radius: number
   opacity: number
   baseOpacity: number
+  // burst particles decay and remove themselves
+  life?: number       // 0..1, only set on burst particles
+  maxLife?: number
 }
 
 export function NodeCanvas() {
@@ -42,6 +43,27 @@ export function NodeCanvas() {
     particlesRef.current = particles
   }, [])
 
+  // Spawn burst particles from a click position
+  const spawnBurst = useCallback((x: number, y: number) => {
+    const count = 22
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3
+      const speed = Math.random() * 3.5 + 1.2
+      const maxLife = 80 + Math.random() * 60
+      particlesRef.current.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius: Math.random() * 2 + 0.8,
+        opacity: 0.7 + Math.random() * 0.3,
+        baseOpacity: 0,
+        life: maxLife,
+        maxLife,
+      })
+    }
+  }, [])
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -60,7 +82,7 @@ export function NodeCanvas() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       dimensionsRef.current = { width, height }
 
-      if (particlesRef.current.length === 0) {
+      if (particlesRef.current.filter(p => !p.life).length === 0) {
         initParticles(width, height)
       }
     }
@@ -73,14 +95,28 @@ export function NodeCanvas() {
     }
     window.addEventListener("mousemove", handleMouseMove)
 
+    const handleClick = (e: MouseEvent) => {
+      spawnBurst(e.clientX, e.clientY)
+    }
+    window.addEventListener("click", handleClick)
+
     const animate = () => {
       const { width, height } = dimensionsRef.current
       ctx.clearRect(0, 0, width, height)
 
-      const particles = particlesRef.current
       const mouse = mouseRef.current
 
-      for (const p of particles) {
+      // Separate base and burst particles
+      const base: Particle[] = []
+      const burst: Particle[] = []
+
+      for (const p of particlesRef.current) {
+        if (p.life !== undefined) burst.push(p)
+        else base.push(p)
+      }
+
+      // --- Base particles ---
+      for (const p of base) {
         p.x += p.vx
         p.y += p.vy
 
@@ -116,36 +152,33 @@ export function NodeCanvas() {
         ctx.fill()
       }
 
-      // Subtle connections near mouse only
-      for (let i = 0; i < particles.length; i++) {
-        const dx = mouse.x - particles[i].x
-        const dy = mouse.y - particles[i].y
+      // --- Connections near mouse ---
+      for (let i = 0; i < base.length; i++) {
+        const dx = mouse.x - base[i].x
+        const dy = mouse.y - base[i].y
         const mouseDist = Math.sqrt(dx * dx + dy * dy)
 
         if (mouseDist < 120) {
           const opacity = (1 - mouseDist / 120) * 0.08
           ctx.beginPath()
-          ctx.moveTo(particles[i].x, particles[i].y)
+          ctx.moveTo(base[i].x, base[i].y)
           ctx.lineTo(mouse.x, mouse.y)
           ctx.strokeStyle = `rgba(230, 225, 215, ${opacity})`
           ctx.lineWidth = 0.5
           ctx.stroke()
 
-          // Connect nearby particles within mouse radius
-          for (let j = i + 1; j < particles.length; j++) {
+          for (let j = i + 1; j < base.length; j++) {
             const pDist = Math.sqrt(
-              (particles[i].x - particles[j].x) ** 2 +
-              (particles[i].y - particles[j].y) ** 2
+              (base[i].x - base[j].x) ** 2 + (base[i].y - base[j].y) ** 2
             )
             const jMouseDist = Math.sqrt(
-              (mouse.x - particles[j].x) ** 2 +
-              (mouse.y - particles[j].y) ** 2
+              (mouse.x - base[j].x) ** 2 + (mouse.y - base[j].y) ** 2
             )
             if (pDist < 100 && jMouseDist < 160) {
               const lineOpacity = (1 - pDist / 100) * 0.04
               ctx.beginPath()
-              ctx.moveTo(particles[i].x, particles[i].y)
-              ctx.lineTo(particles[j].x, particles[j].y)
+              ctx.moveTo(base[i].x, base[i].y)
+              ctx.lineTo(base[j].x, base[j].y)
               ctx.strokeStyle = `rgba(230, 225, 215, ${lineOpacity})`
               ctx.lineWidth = 0.4
               ctx.stroke()
@@ -153,6 +186,47 @@ export function NodeCanvas() {
           }
         }
       }
+
+      // --- Burst particles ---
+      const aliveBurst: Particle[] = []
+      for (const p of burst) {
+        if (p.life === undefined || p.maxLife === undefined) continue
+        p.life -= 1
+        if (p.life <= 0) continue // dead — drop it
+
+        // Decelerate and fade
+        p.vx *= 0.93
+        p.vy *= 0.93
+        p.x += p.vx
+        p.y += p.vy
+
+        const progress = p.life / p.maxLife        // 1 → 0
+        const fadeOpacity = p.opacity * (progress < 0.3 ? progress / 0.3 : 1) // fade out end
+        const radius = p.radius * (0.4 + progress * 0.6)
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(230, 225, 215, ${fadeOpacity * progress})`
+        ctx.fill()
+
+        // Draw lines between nearby burst particles
+        for (const q of aliveBurst) {
+          const d = Math.sqrt((p.x - q.x) ** 2 + (p.y - q.y) ** 2)
+          if (d < 60) {
+            ctx.beginPath()
+            ctx.moveTo(p.x, p.y)
+            ctx.lineTo(q.x, q.y)
+            ctx.strokeStyle = `rgba(230, 225, 215, ${(1 - d / 60) * 0.12 * progress})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
+
+        aliveBurst.push(p)
+      }
+
+      // Rebuild particle list = base + alive burst
+      particlesRef.current = [...base, ...aliveBurst]
 
       animationRef.current = requestAnimationFrame(animate)
     }
@@ -162,9 +236,10 @@ export function NodeCanvas() {
     return () => {
       window.removeEventListener("resize", handleResize)
       window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("click", handleClick)
       cancelAnimationFrame(animationRef.current)
     }
-  }, [initParticles])
+  }, [initParticles, spawnBurst])
 
   return (
     <canvas

@@ -1,8 +1,122 @@
 "use client"
 
-import { useState } from "react"
-import { useInView } from "@/hooks/use-in-view"
-import { ExternalLink } from "lucide-react"
+import { useRef, useState } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+import { useProjectViewCount, incrementProjectView, slugify } from "@/hooks/use-project-views"
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+// Individual row — has its own hook call for the view count
+function ProjectRow({
+  project,
+  index,
+  hovered,
+  onHoverStart,
+  onHoverEnd,
+}: {
+  project: Project
+  index: number
+  hovered: boolean
+  onHoverStart: () => void
+  onHoverEnd: () => void
+}) {
+  const slug = slugify(project.title)
+  const views = useProjectViewCount(slug)
+  const status = statusConfig[project.status]
+
+  return (
+    <motion.a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="project-row group relative flex items-start gap-6 md:gap-10 py-8 lg:py-10 border-t border-border/20 last:border-b cursor-pointer"
+      onHoverStart={onHoverStart}
+      onHoverEnd={onHoverEnd}
+      onClick={() => incrementProjectView(slug)}
+    >
+      {/* Number */}
+      <span className="pt-1 font-mono text-xs text-muted-foreground/40 w-8 shrink-0 select-none">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-4 mb-2">
+          <h3
+            className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-foreground transition-colors duration-300"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            {project.title}
+          </h3>
+          <motion.div
+            animate={{
+              x: hovered ? 3 : 0,
+              y: hovered ? -3 : 0,
+              opacity: hovered ? 1 : 0.3,
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            <ArrowUpRight className="h-5 w-5 text-foreground shrink-0" />
+          </motion.div>
+        </div>
+
+        <AnimatePresence>
+          {hovered && (
+            <motion.p
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="text-sm md:text-base text-muted-foreground leading-relaxed mt-3 max-w-2xl overflow-hidden"
+            >
+              {project.description}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Meta */}
+      <div className="hidden lg:flex flex-col items-end gap-3 shrink-0">
+        <div className="flex flex-wrap justify-end gap-2 max-w-xs">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="font-mono text-xs text-muted-foreground/60 border border-border/20 px-2.5 py-1 rounded-md"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center gap-3">
+          <div className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
+          <span className="font-mono text-xs text-muted-foreground/50">{status.label}</span>
+          <span className="font-mono text-xs text-muted-foreground/30">{project.year}</span>
+          {views !== null && views > 0 && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="font-mono text-xs text-muted-foreground/30"
+            >
+              · {views.toLocaleString()} {views === 1 ? "click" : "clicks"}
+            </motion.span>
+          )}
+        </div>
+      </div>
+
+      {/* Hover background */}
+      <motion.div
+        className="absolute inset-0 bg-foreground/2 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    </motion.a>
+  )
+}
 
 interface Project {
   title: string
@@ -10,147 +124,124 @@ interface Project {
   tags: string[]
   link: string
   status: "live" | "in-progress" | "archived"
+  year: string
 }
 
 const projects: Project[] = [
   {
-    title: "elias4044.com",
-    description:
-      "My personal home center and portfolio. The site you're on right now, built with Next.js, Tailwind CSS, and a custom interactive node canvas.",
-    tags: ["Next.js", "Tailwind CSS", "Canvas API"],
-    link: "https://elias4044.com",
-    status: "live",
-  },
-  {
     title: "Schoolsoft+",
     description:
-      "Recently fully rebuilt, a complete makeover of the digital school platform Schoolsoft+ for students, while completly integrating with the official Schoolsoft.",
-    tags: ["HTML/CSS/JS", "Firebase", "Vercel Edge Functions"],
+      "A complete makeover of the digital school platform Schoolsoft for students. Fully rebuilt with a modern interface that integrates completely with the official Schoolsoft API, with an entire social network.",
+    tags: ["HTML/CSS/JS", "Firebase", "Reverse Engineering"],
     link: "https://ssp.elias4044.com",
     status: "live",
+    year: "2026",
   },
   {
     title: "Subway® Varberg",
-    description: "The website for Subway® Varberg, built with Next.js and Tailwind CSS.",
+    description: "The official website for Subway® Varberg franchise. Clean, fast, and mobile-first with menu, hours, and location.",
     tags: ["Next.js", "Tailwind CSS"],
     link: "https://subway-varberg.elias4044.com/",
     status: "live",
+    year: "2026",
   },
   {
     title: "SlateUI",
     description:
-      "A  modular, event-driven roblox framework built for developers who care about code quality.",
-    tags: ["Roblox", "Next.js", "UI"],
+      "A modular, event-driven Roblox framework built for developers who care about code quality. Clean API surface, zero external dependencies.",
+    tags: ["Roblox", "Luau", "Next.js", "UI Docs"],
     link: "https://slateui.elias4044.com",
     status: "live",
-  },
-  {
-    title: "EOAIZ",
-    description:
-      "A discord bot for easier role management. Local hosted & made for a discord developer buildathon.",
-    tags: ["Node.js", "Discord.js", "Firebase"],
-    link: "https://github.com/elias4044/eoaiz",
-    status: "archived",
+    year: "2026",
   },
   {
     title: "Magma Enhanced",
     description:
-      "An automated way to use the Magma Matteappen application. Done by reverse engineering Magma and its API.",
-    tags: ["Firebase", "Next.js", "Tailwind CSS"],
+      "An automated workflow extension for the Magma Matteappen application, built by reverse-engineering Magma's API. Adds smart features not available natively.",
+    tags: ["Firebase", "Next.js", "Tailwind CSS", "Reverse Engineering"],
     link: "https://magma.elias4044.com",
     status: "live",
+    year: "2026",
+  },
+  {
+    title: "BloxSentinel",
+    description:
+      "A roblox anti-cheat system built to scale. Provides cheat detection and prevention for all types of games, with a simple integration process and live monitoring dashboard.",
+    tags: ["Node.js", "Discord.js", "Firebase"],
+    link: "https://github.com/elias4044/eoaiz",
+    status: "in-progress",
+    year: "2026",
   },
 ]
 
 const statusConfig = {
-  live: { label: "Live", color: "bg-emerald-500" },
-  "in-progress": { label: "In Progress", color: "bg-amber-500" },
-  archived: { label: "Archived", color: "bg-muted-foreground" },
+  live: { label: "Live", dot: "bg-emerald-500" },
+  "in-progress": { label: "In Progress", dot: "bg-amber-500" },
+  archived: { label: "Archived", dot: "bg-muted-foreground/40" },
 }
 
 export function ProjectsSection() {
-  const { ref, isInView } = useInView({ threshold: 0.1 })
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [hovered, setHovered] = useState<number | null>(null)
+
+  useGSAP(
+    () => {
+      gsap.from(".projects-label", {
+        scrollTrigger: { trigger: ".projects-label", start: "top 88%" },
+        opacity: 0,
+        y: 16,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+
+      gsap.from(".projects-heading", {
+        scrollTrigger: { trigger: ".projects-heading", start: "top 85%" },
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: "power3.out",
+      })
+
+      gsap.from(".project-row", {
+        scrollTrigger: { trigger: ".projects-list", start: "top 78%" },
+        opacity: 0,
+        y: 24,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power2.out",
+      })
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <section id="projects" className="relative px-6 py-32" ref={ref}>
-      <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="mb-16 flex items-center gap-4">
-          <div
-            className={`transition-all duration-700 ${
-              isInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
+    <section id="projects" ref={sectionRef} className="px-6 lg:px-16 py-32 lg:py-48">
+      <div className="mx-auto max-w-7xl">
+        {/* Heading */}
+        <div className="mb-20 lg:mb-28">
+          <span className="projects-label block font-mono text-xs text-muted-foreground tracking-widest uppercase mb-4">
+            02 — Work
+          </span>
+          <h2
+            className="projects-heading font-black tracking-tighter text-foreground leading-none"
+            style={{ fontSize: "clamp(56px, 11vw, 160px)", lineHeight: 0.9, letterSpacing: "-0.04em" }}
           >
-            <span className="font-mono text-sm text-primary">{"// 02"}</span>
-            <h2 className="mt-2 text-4xl font-bold text-foreground md:text-5xl">
-              Projects
-            </h2>
-          </div>
-          <div
-            className={`hidden h-px flex-1 bg-border/30 md:block transition-all duration-1000 delay-300 ${
-              isInView ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-            }`}
-            style={{ transformOrigin: "left" }}
-          />
+            Selected<br />Projects
+          </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, i) => {
-            const status = statusConfig[project.status]
-            return (
-              <a
-                key={project.title}
-                href={project.link}
-                target={project.link !== "#" ? "_blank" : undefined}
-                rel={project.link !== "#" ? "noopener noreferrer" : undefined}
-                className={`group relative rounded-2xl border border-border/30 bg-card/40 p-6 backdrop-blur-sm transition-all duration-500 hover:border-primary/40 hover:bg-card/60 hover:shadow-[0_0_40px_rgba(100,210,220,0.08)] ${
-                  isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-                }`}
-                style={{ transitionDelay: isInView ? `${200 + i * 100}ms` : "0ms" }}
-                onMouseEnter={() => setHoveredIndex(i)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className={`h-2 w-2 rounded-full ${status.color}`} />
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {status.label}
-                    </span>
-                  </div>
-                  <ExternalLink
-                    className={`h-4 w-4 text-muted-foreground transition-all duration-300 ${
-                      hoveredIndex === i
-                        ? "text-primary translate-x-0.5 -translate-y-0.5"
-                        : ""
-                    }`}
-                  />
-                </div>
-
-                <h3 className="mb-2 text-lg font-bold text-foreground transition-colors duration-300 group-hover:text-primary">
-                  {project.title}
-                </h3>
-
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md bg-secondary/40 px-2 py-1 font-mono text-xs text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {hoveredIndex === i && (
-                  <div className="absolute inset-0 rounded-2xl bg-primary/5 pointer-events-none" />
-                )}
-              </a>
-            )
-          })}
+        {/* Project list */}
+        <div className="projects-list">
+          {projects.map((project, i) => (
+            <ProjectRow
+              key={project.title}
+              project={project}
+              index={i}
+              hovered={hovered === i}
+              onHoverStart={() => setHovered(i)}
+              onHoverEnd={() => setHovered(null)}
+            />
+          ))}
         </div>
       </div>
     </section>
