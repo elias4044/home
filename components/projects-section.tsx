@@ -5,10 +5,83 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, BookOpen, Package, Globe } from "lucide-react"
 import { useProjectViewCount, incrementProjectView, slugify } from "@/hooks/use-project-views"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+const sspEcosystem = [
+  {
+    key: "ssp-main",
+    glyph: Globe,
+    label: "Schoolsoft+",
+    sub: "The platform itself",
+    href: "https://ssp.elias4044.com",
+  },
+  {
+    key: "ssp-developer",
+    glyph: BookOpen,
+    label: "ssp-developer",
+    sub: "API & platform docs",
+    href: "https://developer.ssp.elias4044.com",
+  },
+  {
+    key: "ssp-node",
+    glyph: Package,
+    label: "ssp-node",
+    sub: "NPM library",
+    href: "https://developer.ssp.elias4044.com/docs/ssp-node",
+  },
+]
+
+function SSPEcosystemPanel({ visible }: { visible: boolean }) {
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          className="overflow-hidden"
+        >
+          <div className="flex flex-wrap gap-3 mt-4 mb-1">
+            {sspEcosystem.map((item, i) => {
+              const Icon = item.glyph
+              return (
+                <motion.a
+                  key={item.key}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: 6, filter: "blur(4px)" }}
+                  transition={{ duration: 0.22, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="group/chip flex items-center gap-2.5 px-3.5 py-2 rounded-xl border border-border/30 bg-background/60 backdrop-blur-sm hover:border-foreground/20 hover:bg-foreground/5 transition-all duration-200"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground/6 group-hover/chip:bg-foreground/10 transition-colors duration-200">
+                    <Icon className="h-3 w-3 text-foreground/60" />
+                  </span>
+                  <span className="flex flex-col leading-none gap-0.5">
+                    <span className="font-mono text-xs font-semibold text-foreground/80 group-hover/chip:text-foreground transition-colors duration-200">
+                      {item.label}
+                    </span>
+                    <span className="font-mono text-[10px] text-muted-foreground/50">
+                      {item.sub}
+                    </span>
+                  </span>
+                  <ArrowUpRight className="h-3 w-3 text-muted-foreground/30 group-hover/chip:text-foreground/60 group-hover/chip:translate-x-0.5 group-hover/chip:-translate-y-0.5 transition-all duration-200 ml-0.5" />
+                </motion.a>
+              )
+            })}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
 
 // Individual row — has its own hook call for the view count
 function ProjectRow({
@@ -27,16 +100,13 @@ function ProjectRow({
   const slug = slugify(project.title)
   const views = useProjectViewCount(slug)
   const status = statusConfig[project.status]
+  const isSSP = project.title === "Schoolsoft+"
 
   return (
-    <motion.a
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="project-row group relative flex items-start gap-6 md:gap-10 py-8 lg:py-10 border-t border-border/20 last:border-b cursor-pointer"
+    <motion.div
+      className="project-row group relative flex items-start gap-6 md:gap-10 py-8 lg:py-10 border-t border-border/20 last:border-b"
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      onClick={() => incrementProjectView(slug)}
     >
       {/* Number */}
       <span className="pt-1 font-mono text-xs text-muted-foreground/40 w-8 shrink-0 select-none">
@@ -45,7 +115,13 @@ function ProjectRow({
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-4 mb-2">
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-4 mb-2 cursor-pointer"
+          onClick={() => incrementProjectView(slug)}
+        >
           <h3
             className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-foreground transition-colors duration-300"
             style={{ letterSpacing: "-0.02em" }}
@@ -62,21 +138,25 @@ function ProjectRow({
           >
             <ArrowUpRight className="h-5 w-5 text-foreground shrink-0" />
           </motion.div>
-        </div>
+        </a>
 
-        <AnimatePresence>
-          {hovered && (
-            <motion.p
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="text-sm md:text-base text-muted-foreground leading-relaxed mt-3 max-w-2xl overflow-hidden"
-            >
-              {project.description}
-            </motion.p>
-          )}
-        </AnimatePresence>
+        {isSSP ? (
+          <SSPEcosystemPanel visible={hovered} />
+        ) : (
+          <AnimatePresence>
+            {hovered && (
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="text-sm md:text-base text-muted-foreground leading-relaxed mt-3 max-w-2xl overflow-hidden"
+              >
+                {project.description}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        )}
       </div>
 
       {/* Meta */}
@@ -114,7 +194,7 @@ function ProjectRow({
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.2 }}
       />
-    </motion.a>
+    </motion.div>
   )
 }
 
